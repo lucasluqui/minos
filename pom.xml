@@ -9,9 +9,12 @@
   <version>1.0.0</version>
 
   <name>minos</name>
+  <description>A small library to help myself quickly set-up Discord bots using Discord4J.</description>
+  <url>https://github.com/lucasluqui/minos</url>
 
   <licenses>
     <license>
+      <name>GNU General Public License v3.0</name>
       <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
     </license>
   </licenses>
@@ -24,9 +27,17 @@
     </developer>
   </developers>
 
+  <scm>
+    <connection>scm:git:git://github.com/lucasluqui/minos.git</connection>
+    <developerConnection>scm:git:ssh://github.com:lucasluqui/minos.git</developerConnection>
+    <url>https://github.com/lucasluqui/minos/tree/main</url>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -121,11 +132,72 @@
         <version>3.14.0</version>
         <configuration>
           <encoding>UTF-8</encoding>
-          <source>25</source>
-          <target>25</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+          </resource>
+        </resources>
+
+        <plugins>
+          <!-- Attach Sources -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.3.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- Attach Javadocs -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.11.2</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- Sign Artifacts with GPG -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.7</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
