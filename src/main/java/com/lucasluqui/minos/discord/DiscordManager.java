@@ -104,7 +104,7 @@ public abstract class DiscordManager
 
   protected void setupDispatcher ()
   {
-    // setup discord evt dispatcher.
+    // setup discord event dispatcher.
     EventDispatcher dispatcher = _gateway.getEventDispatcher();
 
     // when we're connected to the gateway.
