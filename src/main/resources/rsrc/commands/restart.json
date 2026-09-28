@@ -1,0 +1,4 @@
+{
+  "name": "restart",
+  "description": "Forces the Discord gateway client to log out then redo all init sequence."
+}
