@@ -38,3 +38,6 @@ out/
 
 # Deploy config
 deploy.properties
+
+# Maven settings file
+settings.xml
