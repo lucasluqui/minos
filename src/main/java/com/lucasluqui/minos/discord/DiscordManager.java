@@ -16,11 +16,13 @@ import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.EventDispatcher;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
+import discord4j.core.event.domain.guild.MemberUpdateEvent;
 import discord4j.core.event.domain.guild.ScheduledEventDeleteEvent;
 import discord4j.core.event.domain.guild.ScheduledEventUpdateEvent;
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.event.domain.role.RoleUpdateEvent;
 import discord4j.core.object.entity.*;
 import discord4j.core.spec.*;
 import discord4j.discordjson.json.MessageReferenceData;
@@ -136,6 +138,12 @@ public abstract class DiscordManager
       .flatMap(event -> Mono.fromRunnable(() -> this.onMemberJoin(event.getMember()))
         .onErrorContinue((e, _) -> log.error(e)))
       .subscribe();
+
+    // when a guild member is updated. for example - their roles change.
+    dispatcher.on(MemberUpdateEvent.class)
+      .flatMap(event -> Mono.fromRunnable(() -> this.onMemberUpdate(event))
+        .onErrorContinue((e, _) -> log.error(e)))
+      .subscribe();
   }
 
   private void setupCommands ()
@@ -182,6 +190,11 @@ public abstract class DiscordManager
   }
 
   protected void onMemberJoin (Member member)
+  {
+    // empty.
+  }
+
+  protected void onMemberUpdate (MemberUpdateEvent event)
   {
     // empty.
   }
