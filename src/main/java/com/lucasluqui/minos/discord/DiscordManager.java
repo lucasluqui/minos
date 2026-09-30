@@ -199,14 +199,14 @@ public abstract class DiscordManager
     // empty.
   }
 
-  protected void sendMessage (String content, long channelId)
+  public void sendMessage (String content, long channelId)
   {
     _gateway.getChannelById(Snowflake.of(channelId))
       .flatMap(channel -> channel.getRestChannel().createMessage(content))
       .subscribe();
   }
 
-  protected void ban (Snowflake userId, String reason, int deleteMessageDays)
+  public void ban (Snowflake userId, String reason, int deleteMessageDays)
   {
     Guild guild = _gateway.getGuildById(Snowflake.of(_guildId)).block();
 
@@ -217,13 +217,13 @@ public abstract class DiscordManager
     ).subscribe();
   }
 
-  protected void kick (Snowflake userId, String reason)
+  public void kick (Snowflake userId, String reason)
   {
     Guild guild = _gateway.getGuildById(Snowflake.of(_guildId)).block();
     guild.kick(userId, reason).subscribe();
   }
 
-  protected void replyMessage (Message message, String content)
+  public void replyMessage (Message message, String content)
   {
     message.getChannel()
       .flatMap(channel -> channel.createMessage(
@@ -238,7 +238,7 @@ public abstract class DiscordManager
       .subscribe();
   }
 
-  protected void sendWebhookMessage (long id, String token, String content, EmbedCreateSpec embed, boolean publish)
+  public void sendWebhookMessage (long id, String token, String content, EmbedCreateSpec embed, boolean publish)
   {
     Message message = _gateway.getWebhookByIdWithToken(Snowflake.of(id), token)
       .flatMap(webhook -> {
@@ -259,7 +259,7 @@ public abstract class DiscordManager
     }
   }
 
-  protected void editWebhookMessage (long id, String token, long messageId, String newContent, EmbedCreateSpec newEmbed)
+  public void editWebhookMessage (long id, String token, long messageId, String newContent, EmbedCreateSpec newEmbed)
   {
     _gateway.getWebhookByIdWithToken(Snowflake.of(id), token)
       .flatMap(webhook -> {
@@ -279,7 +279,7 @@ public abstract class DiscordManager
   }
 
   @Deprecated
-  protected void editExternalWebhookMessage (long id, String token, long messageId, String newContent, EmbedCreateSpec newEmbed)
+  public void editExternalWebhookMessage (long id, String token, long messageId, String newContent, EmbedCreateSpec newEmbed)
   {
     WebhookService service = new WebhookService(new DefaultRouter(new RouterOptions("", ReactorResources.create(),
       ExchangeStrategies.jackson(JacksonResources.create().getObjectMapper()),
@@ -308,7 +308,7 @@ public abstract class DiscordManager
     }
   }
 
-  protected void sendExternalWebhookMessage (long id, String token, String content, EmbedCreateSpec embed)
+  public void sendExternalWebhookMessage (long id, String token, String content, EmbedCreateSpec embed)
   {
     WebhookService service = new WebhookService(new DefaultRouter(new RouterOptions("", ReactorResources.create(),
       ExchangeStrategies.jackson(JacksonResources.create().getObjectMapper()),
@@ -337,27 +337,27 @@ public abstract class DiscordManager
     }
   }
 
-  protected void sendDirectMessage (String id, String message)
+  public void sendDirectMessage (String id, String message)
   {
     sendDirectMessage(Snowflake.of(id), message, false);
   }
 
-  protected void sendDirectMessage (long id, String message)
+  public void sendDirectMessage (long id, String message)
   {
     sendDirectMessage(Snowflake.of(id), message, false);
   }
 
-  protected void sendDirectMessage (String id, String message, boolean block)
+  public void sendDirectMessage (String id, String message, boolean block)
   {
     sendDirectMessage(Snowflake.of(id), message, block);
   }
 
-  protected void sendDirectMessage (long id, String message, boolean block)
+  public void sendDirectMessage (long id, String message, boolean block)
   {
     sendDirectMessage(Snowflake.of(id), message, block);
   }
 
-  protected void sendDirectMessage (Snowflake id, String message, boolean block)
+  public void sendDirectMessage (Snowflake id, String message, boolean block)
   {
     if (block) {
       _gateway.getUserById(id)
@@ -377,7 +377,7 @@ public abstract class DiscordManager
       .subscribe();
   }
 
-  protected void sendDirectMessage (User user, String message, boolean block)
+  public void sendDirectMessage (User user, String message, boolean block)
   {
     if (block) {
       user.getPrivateChannel()
@@ -422,7 +422,7 @@ public abstract class DiscordManager
     );
   }
 
-  protected void setServerIcon (String url)
+  public void setServerIcon (String url)
   {
     GuildEditSpec editSpec = GuildEditSpec.builder()
       .icon(Possible.of(Optional.of(Image.ofUrl(url != null ? url : _defaultServerIcon).block())))
@@ -434,7 +434,7 @@ public abstract class DiscordManager
       .block();
   }
 
-  protected void setServerBanner (String url)
+  public void setServerBanner (String url)
   {
     Possible<Optional<Image>> image = Possible.of(Optional.of(Image.ofUrl(url != null ? url : _defaultServerBanner).block()));
     GuildEditSpec editSpec = GuildEditSpec.builder()
