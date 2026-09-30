@@ -201,6 +201,29 @@ public abstract class DiscordManager
 
   public void sendMessage (String content, long channelId)
   {
+    sendMessage(content, null, channelId);
+  }
+
+  public void sendMessage (EmbedCreateSpec embed, long channelId)
+  {
+    sendMessage(null, embed, channelId);
+  }
+
+  public void sendMessage (String content, EmbedCreateSpec embed, long channelId)
+  {
+    if (content != null && embed != null) {
+      // TODO: Support messages with both content and embed.
+      log.warning("Sending messages with both content and embed is not yet supported");
+      return;
+    }
+
+    if (embed != null) {
+      _gateway.getChannelById(Snowflake.of(channelId))
+        .flatMap(channel -> channel.getRestChannel().createMessage(embed.asRequest()))
+        .subscribe();
+      return;
+    }
+
     _gateway.getChannelById(Snowflake.of(channelId))
       .flatMap(channel -> channel.getRestChannel().createMessage(content))
       .subscribe();
