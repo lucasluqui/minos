@@ -6,7 +6,7 @@
   <groupId>com.lucasluqui</groupId>
   <artifactId>minos</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
 
   <name>minos</name>
   <description>A small library to help myself quickly set-up Discord bots using Discord4J.</description>
