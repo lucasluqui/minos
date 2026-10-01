@@ -265,6 +265,38 @@ public abstract class DiscordManager
     guild.kick(userId, reason).subscribe();
   }
 
+  public void timeout (long snowflake, String reason)
+  {
+    timeout(snowflake, Duration.ofDays(27), reason);
+  }
+
+  public void timeout (long snowflake, Duration duration, String reason)
+  {
+    Instant communicationDisabledUntil = Instant.now().plus(duration);
+    GuildMemberEditSpec editSpec = GuildMemberEditSpec.builder()
+      .communicationDisabledUntilOrNull(communicationDisabledUntil)
+      .build().withReason(reason);
+
+    _gateway.getGuildById(Snowflake.of(_guildId))
+      .flatMap(guild -> guild.getMemberById(Snowflake.of(snowflake)))
+      .flatMap(member -> member.edit(editSpec))
+      .onErrorContinue((t, _) -> log.error("Failed to edit user timeout", t))
+      .subscribe();
+  }
+
+  public void liftTimeout (long snowflake)
+  {
+    GuildMemberEditSpec editSpec = GuildMemberEditSpec.builder()
+      .communicationDisabledUntilOrNull(null)
+      .build().withReason("Timeout lifted.");
+
+    _gateway.getGuildById(Snowflake.of(_guildId))
+      .flatMap(guild -> guild.getMemberById(Snowflake.of(snowflake)))
+      .flatMap(member -> member.edit(editSpec))
+      .onErrorContinue((t, _) -> log.error("Failed to edit user timeout", t))
+      .subscribe();
+  }
+
   public void replyMessage (Message message, String content)
   {
     message.getChannel()
